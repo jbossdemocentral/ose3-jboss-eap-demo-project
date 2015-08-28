@@ -39,11 +39,13 @@ public class SettingsRestService {
             return System.getenv("COMPUTERNAME");
         } else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0 || OS.indexOf("Mac OS")>=0 ) {
         	try {
-        		BufferedReader reader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("hostname").getInputStream()));
-				return reader.readLine();
+        		if(Runtime.getRuntime().exec("sh -f /.dockerinit").exitValue()==0) {
+					return "Running in a docker container, where hostname command isn't available";
+				} else {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(Runtime.getRuntime().exec("hostname").getInputStream()));
+					return reader.readLine();
+				}
 			} catch (IOException e) {
-				
-				e.printStackTrace();
 				return "Failed to get from native hostname command";
 			}
         }
