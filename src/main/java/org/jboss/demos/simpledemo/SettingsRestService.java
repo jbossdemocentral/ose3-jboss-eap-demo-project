@@ -18,6 +18,12 @@ public class SettingsRestService {
 	public SettingsRestService() throws InterruptedException, IOException {
 		settingsMap.put("hostname", getHostname());
 		settingsMap.put("os", getOperatingSystemInfo());
+		settingsMap.put("username", System.getProperty("user.name"));
+		settingsMap.put("homedir", System.getProperty("user.home"));
+		settingsMap.put("workingdir", System.getProperty("user.dir"));
+		settingsMap.put("java.home", System.getProperty("java.home"));
+		settingsMap.put("java.vendor", System.getProperty("java.vendor"));
+		settingsMap.put("java.version", System.getProperty("java.version"));
 	}
 
 	@GET
