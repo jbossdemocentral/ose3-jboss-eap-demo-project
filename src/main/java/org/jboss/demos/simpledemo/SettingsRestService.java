@@ -21,9 +21,9 @@ public class SettingsRestService {
 		settingsMap.put("username", System.getProperty("user.name"));
 		settingsMap.put("homedir", System.getProperty("user.home"));
 		settingsMap.put("workingdir", System.getProperty("user.dir"));
-		settingsMap.put("java.home", System.getProperty("java.home"));
-		settingsMap.put("java.vendor", System.getProperty("java.vendor"));
-		settingsMap.put("java.version", System.getProperty("java.version"));
+		settingsMap.put("java_home", System.getProperty("java.home"));
+		settingsMap.put("java_vendor", System.getProperty("java.vendor"));
+		settingsMap.put("java_version", System.getProperty("java.version"));
 	}
 
 	@GET
@@ -39,8 +39,12 @@ public class SettingsRestService {
 			return System.getenv("COMPUTERNAME");
 		} else if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0
 				|| OS.indexOf("Mac OS") >= 0) {
-			if (Runtime.getRuntime().exec("sh -f /.dockerinit").waitFor() == 0) {
-				return "Running in a docker container, where hostname command isn't available";
+			if (Runtime.getRuntime().exec("test -f /.dockerinit").waitFor() == 0) {
+				// uname -a | awk '{print $2}'
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(Runtime.getRuntime()
+								.exec("uname -a").getInputStream()));
+				return reader.readLine().split("\\s")[1];
 			} else {
 				BufferedReader reader = new BufferedReader(
 						new InputStreamReader(Runtime.getRuntime()
@@ -54,16 +58,23 @@ public class SettingsRestService {
 
 	private String getOperatingSystemInfo() throws InterruptedException,
 			IOException {
-		if (Runtime.getRuntime().exec("sh -f /etc/redhat-release").waitFor() == 0) {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(
-					Runtime.getRuntime().exec("cat /etc/redhat-release")
-							.getInputStream()));
-			return reader.readLine();
-		} else {
-			return String.format("%1$s-%3$s (%2$s)",
-					System.getProperty("os.name"),
-					System.getProperty("os.arch"),
-					System.getProperty("os.version"));
+		String OS = System.getProperty("os.name");
+		if (OS.indexOf("nix") >= 0 || OS.indexOf("nux") >= 0
+				|| OS.indexOf("Mac OS") >= 0) {
+			if (Runtime.getRuntime().exec("test -f /etc/redhat-release")
+					.waitFor() == 0) {
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(Runtime.getRuntime()
+								.exec("cat /etc/redhat-release")
+								.getInputStream()));
+				return reader.readLine();
+			} else {
+				return String.format("%1$s-%3$s (%2$s)",
+						System.getProperty("os.name"),
+						System.getProperty("os.arch"),
+						System.getProperty("os.version"));
+			}
 		}
+		return "UNKNOWN";
 	}
 }

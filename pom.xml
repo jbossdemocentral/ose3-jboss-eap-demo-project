@@ -6,14 +6,17 @@
 	<version>1.0.0</version>
 	<packaging>war</packaging>
 	<name>simpledemo</name>
+	<properties>
+		<docker.host>tcp://127.0.0.1:2375</docker.host>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
-			<!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill
-                of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection)
-                of artifacts. We use this here so that we always get the correct versions
-                of artifacts. Here we use the jboss-javaee-6.0-with tools stack (you can read this as
-                the JBoss stack of the Java EE 6 APIs, with some extras tools for your project, such
-                as Arquillian for testing) -->
+			<!-- JBoss distributes a complete set of Java EE 6 APIs including a Bill 
+				of Materials (BOM). A BOM specifies the versions of a "stack" (or a collection) 
+				of artifacts. We use this here so that we always get the correct versions 
+				of artifacts. Here we use the jboss-javaee-6.0-with tools stack (you can 
+				read this as the JBoss stack of the Java EE 6 APIs, with some extras tools 
+				for your project, such as Arquillian for testing) -->
 			<dependency>
 				<groupId>org.jboss.bom</groupId>
 				<artifactId>jboss-javaee-6.0-with-tools</artifactId>
@@ -27,7 +30,7 @@
 				<version>6.3.0.GA</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.infinispan</groupId>
 				<artifactId>infinispan-bom</artifactId>
@@ -43,13 +46,15 @@
 			<artifactId>cdi-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- Import the JAX-RS API, we use provided scope as the API is included in JBoss AS 7 -->
+		<!-- Import the JAX-RS API, we use provided scope as the API is included 
+			in JBoss AS 7 -->
 		<dependency>
 			<groupId>org.jboss.spec.javax.ws.rs</groupId>
 			<artifactId>jboss-jaxrs-api_1.1_spec</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!-- JSON: to include json support (note json is not part of the JAX-RS standard) -->
+		<!-- JSON: to include json support (note json is not part of the JAX-RS 
+			standard) -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
@@ -61,9 +66,9 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
-		<finalName>simpledemo</finalName>
+		<finalName>simpledemo.war</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
@@ -100,8 +105,36 @@
 					<target>1.7</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jolokia</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.13.3</version>
+				<configuration>
+					<images>
+						<image>
+							<name>tqvarnst/mysimpledemo</name>
+							<alias>simpleApp</alias>
+							<build>
+								<from>tqvarnst/jbossdev</from>
+								<maintainer>Thomas Qvarnstrom &lt;tqvarnst@redhat.com&gt;</maintainer>
+								<assembly>
+									<basedir>/opt/eap/standalone/deployments</basedir>
+									<descriptor>${basedir}/src/main/assembly.xml</descriptor>
+								</assembly>
+							</build>
+							<run>
+								<hostname>simpleApp.local</hostname>
+								<namingStrategy>alias</namingStrategy>
+								<ports>
+									<port>9080:8080</port>
+								</ports>
+							</run>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
 		</plugins>
-		
+
 	</build>
 	<repositories>
 		<repository>
@@ -119,4 +152,5 @@
 			</snapshots>
 		</repository>
 	</repositories>
+
 </project>
