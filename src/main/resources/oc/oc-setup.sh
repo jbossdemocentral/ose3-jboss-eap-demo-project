@@ -6,7 +6,7 @@ if [ "$#" -ne 1 ]; then
 fi
 
 oc new-project $1
-oc create -f jboss-eap-imagestream.json
-oc create -f simple-eap-temlpate.json
-oc new-app --template=jboss-demo-example
-oc start-build jbossdemo
+oc create -f scripts/jboss-eap-imagestream.json
+oc create -f scripts/simple-eap-temlpate.json
+#oc new-app --template=jboss-demo-example
+#oc start-build jbossdemo
