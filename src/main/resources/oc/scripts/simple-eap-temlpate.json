@@ -26,8 +26,7 @@
         {
             "description": "Github trigger secret",
             "name": "GITHUB_TRIGGER_SECRET",
-            "from": "[a-zA-Z0-9]{8}",
-            "generate": "expression"
+            "value": "jbossdemo"
         }
     ],
     "objects": [
