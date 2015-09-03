@@ -68,7 +68,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>simpledemo.war</finalName>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
@@ -115,7 +115,7 @@
 							<name>tqvarnst/mysimpledemo</name>
 							<alias>simpleApp</alias>
 							<build>
-								<from>tqvarnst/jbossdev</from>
+								<from>registry.access.redhat.com/jboss-eap-6/eap-openshift</from>
 								<maintainer>Thomas Qvarnstrom &lt;tqvarnst@redhat.com&gt;</maintainer>
 								<assembly>
 									<basedir>/opt/eap/standalone/deployments</basedir>
