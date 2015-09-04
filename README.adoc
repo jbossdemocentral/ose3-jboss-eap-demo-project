@@ -18,4 +18,12 @@ copy oc login string and run it in a shell
     $ cd ~/git/ose3-jboss-eap-demo-project/src/main/resources/oc
     $ sh /oc-setup.sh jbossdemo
 
-3. 
+3. Install JBoss Developer Studio 9 Beta 2 or later
+
+4. Start JBoss Developer Studio and import the simpledemo project
+
+5. Open src/main/webapp/index.html
+
+## How to run the demo
+
+1. Start the application in 

@@ -115,6 +115,7 @@
 							<name>tqvarnst/mysimpledemo</name>
 							<alias>simpleApp</alias>
 							<build>
+								<!-- <from>ce-registry.usersys.redhat.com/jboss-eap-6/eap:6.4</from> -->
 								<from>registry.access.redhat.com/jboss-eap-6/eap-openshift</from>
 								<maintainer>Thomas Qvarnstrom &lt;tqvarnst@redhat.com&gt;</maintainer>
 								<assembly>

@@ -25,6 +25,7 @@ if [ "$(oc get project | grep $1 | wc -l)" -ne 0 ]; then
   else
     echo "Deleting project $1"
     oc delete project $1
+    sleep 2 # Allow time for the OpenShift to update it's project registry
   fi
 fi
 
@@ -39,7 +40,10 @@ if [ "$answer" == "n" -o "$answer" == "N" -o "$answer" == "No" -o "$answer" == "
   echo ""
 else
   echo "Building app jbossdemo"
-  oc start-build jbossdemo
+  oc start-build jbossdemo --follow=true > /dev/null
+  if [ "$?" -ne 0 ]; then
+    echo "ERROR: There was an error buiding the project, to see the build run 'oc get builds' to get the latest build id and then run 'oc build-logs <build-id>'."
+  fi
 fi
 
 echo "Stoping and deleting existing local containers"
