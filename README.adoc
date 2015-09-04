@@ -1,0 +1,21 @@
+# How to Run this Demo (Red Hat Employees)
+
+## Preparations
+1. Fork this project on GitHub and update the webhook (project-name is specified when you run oc-setup)
+
+On github go to the settting > Webhooks. Add a webhook with URL https://api.engint.openshift.com/osapi/v1beta3/namespaces/jbossdemo/buildconfigs/<project-name>/webhooks/jbossdemo/github
+
+Note: Replace <project-name> with the name you plan to use for the project
+
+1. Login to EngInt OpenShift
+
+   $ open https://api.engint.openshift.com/oauth/token/request
+
+copy oc login string and run it in a shell
+
+2. Run oc-setup.sh
+
+    $ cd ~/git/ose3-jboss-eap-demo-project/src/main/resources/oc
+    $ sh /oc-setup.sh jbossdemo
+
+3. 
